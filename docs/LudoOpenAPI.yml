@@ -9,11 +9,61 @@ info:
 paths:
   /ludo/game/new:
     get:
+    summary: Starts new game
+    responses:
+        '200':
+          description: OK          
   /ludo/game/{gameId}/addplayer:
     post:
+      summary: Adds new player 
+      parameters:
+        - in: query
+          name: playername
+          schema:
+            type: string
+          required: true
+          description: Name of player to set
+        - in: query
+          name: playercolor
+          schema:
+            type: string
+            enum:
+              - red
+              - green
+              - blue
+              - yellow
+          required: true
+          description: color of player to set
   /ludo/game/{gameId}/roll:
     get:
-      description: Rolls the die and return what number it gave.
+      summary: Rolls the die and return what number it gave.
+      responses:
+        '200':
+          description: OK
+          content:
+            text/json:
+              schema:
+                type: integer                
   /ludo/game/{gameId}/movepiece:
     get:
-      description: Moves the piece
+      summary: Moves the piece and return new position
+      parameters:
+        - in: query
+          name: player
+          schema:
+            type: Objecet
+          required: true
+          description: current player
+        - in: query
+          name: pieceID
+          schema: 
+            type: integer
+          required: true
+          description: the current moving piece
+        - in: query
+          name: numberoffields
+          schema:
+            type: integer                
+          required: true
+          description: numberoffields ??  
+         

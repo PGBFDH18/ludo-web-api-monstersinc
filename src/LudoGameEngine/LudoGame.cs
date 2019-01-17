@@ -10,12 +10,8 @@ namespace LudoGameEngine
         private List<Player> _players = new List<Player>();
         private GameState _gameState = GameState.NotStarted;
         private int currentPlayerId = 0;
-        private IDiece _diece = null;
-
-        public LudoGame(IDiece diece)
-        {
-            _diece = diece;
-        }
+        private IDiece _diece = new Diece();
+       
 
         public Player AddPlayer(string name, PlayerColor color)
         {
@@ -110,7 +106,7 @@ namespace LudoGameEngine
             return _players.ToArray();
         }
 
-        public void MovePiece(Player player, int pieceId, int numberOfFields)
+        public int MovePiece(Player player, int pieceId, int numberOfFields)
         {
             if (_gameState == GameState.Ended)
             {
@@ -145,6 +141,7 @@ namespace LudoGameEngine
                 piece.State = PieceGameState.Goal;
             }
 
+            return newPosition;
         }
 
         public int RollDiece()
