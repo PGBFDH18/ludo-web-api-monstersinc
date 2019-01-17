@@ -7,4 +7,13 @@ info:
     email: contact@example.com
     url: https://example.com/
 paths:
-  get:
+  /ludo/game/new:
+    get:
+  /ludo/game/{gameId}/addplayer:
+    post:
+  /ludo/game/{gameId}/roll:
+    get:
+      description: Rolls the die and return what number it gave.
+  /ludo/game/{gameId}/movepiece:
+    get:
+      description: Moves the piece
