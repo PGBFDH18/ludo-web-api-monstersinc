@@ -1,0 +1,10 @@
+openapi: 3.0.0
+info:
+  title: "LudoAPI"
+  version: "0.0.1"
+  contact:
+    name: Team MonstersINC
+    email: contact@example.com
+    url: https://example.com/
+paths:
+  get:
