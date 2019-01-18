@@ -9,6 +9,7 @@ namespace LudoWebAPI.Models
     public class Game
     {
         static List<LudoGame> activeGames = new List<LudoGame> { };
+
         
     }
 }

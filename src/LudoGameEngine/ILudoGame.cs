@@ -10,7 +10,7 @@ namespace LudoGameEngine
 
         int RollDiece();
 
-        int MovePiece(Player player, int pieceId, int numberOfFields);
+        void MovePiece(Player player, int pieceId, int numberOfFields);
         void EndTurn(Player player);
 
         Player GetCurrentPlayer();
