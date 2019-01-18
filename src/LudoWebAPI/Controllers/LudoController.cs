@@ -20,10 +20,10 @@ namespace LudoWebAPI.Controllers
         }
         // POST api/ludo
         [HttpPost]
-        public ObjectResult NewGame()
+        public OkResult NewGame()
         {
             int id = Game.CreateNewGame();
-            return Ok("New game created. Game ID: " + id);
+            return Ok();
         }
         // GET api/ludo/2
         [HttpGet("{id}")]
@@ -33,10 +33,10 @@ namespace LudoWebAPI.Controllers
         }
         // DELETE api/ludo/2
         [HttpDelete("{id}")]
-        public ObjectResult Delete(int id)
+        public OkResult Delete(int id)
         {
             Game.activeGames.Remove(id);
-            return Ok("Game " + id + " deleted");
+            return Ok();
         }
 
         // GET api/ludo/2/player
@@ -46,12 +46,12 @@ namespace LudoWebAPI.Controllers
             return Game.activeGames[gameId]._players;
         }
 
-        // POST api/ludo/2/player?brad&0
+        // POST api/ludo/2/player?name=Brad&color=red
         [HttpPost("{gameId}/player")]
-        public ObjectResult AddPlayer(int gameId, string name, PlayerColor color)
+        public OkResult AddPlayer(int gameId, string name, PlayerColor color)
         {
             Game.activeGames[gameId].AddPlayer(name, color);
-            return Ok(name + "(" + color + ") added to Game " + gameId);
+            return Ok();
         }
 
         // GET api/ludo/2/player/2

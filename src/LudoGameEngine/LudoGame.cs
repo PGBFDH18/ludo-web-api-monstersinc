@@ -106,7 +106,7 @@ namespace LudoGameEngine
             return _players.ToArray();
         }
 
-        public void MovePiece(Player player, int pieceId, int numberOfFields)
+        public void MovePiece(Player player, int pieceId, int steps)
         {
             if (_gameState == GameState.Ended)
             {
@@ -126,8 +126,8 @@ namespace LudoGameEngine
             }
 
             var currentPosition = piece.Position;
-
-            var newPosition = currentPosition += numberOfFields;
+            
+            var newPosition = currentPosition + steps;
             piece.State = PieceGameState.InGame;
             piece.Position = newPosition;
 
