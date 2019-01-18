@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: "LudoAPI"
-  version: "0.0.1"
+  version: "1.0.0"
   contact:
     name: Team MonstersINC
     email: contact@example.com
@@ -9,14 +9,23 @@ info:
 paths:
   /ludo/game/new:
     get:
-    summary: Starts new game
-    responses:
+     summary: Starts new game
+     responses:
         '200':
           description: OK          
   /ludo/game/{gameId}/addplayer:
     post:
-      summary: Adds new player 
+      summary: Adds new player  
+      responses:
+        '200':
+          description: OK  
       parameters:
+        - in: path
+          name: gameId 
+          required: true
+          schema:
+            type: integer
+          description: The Game ID
         - in: query
           name: playername
           schema:
@@ -43,27 +52,78 @@ paths:
           content:
             text/json:
               schema:
-                type: integer                
+                type: integer 
+      parameters:
+        - in: path
+          name: gameId 
+          required: true
+          schema:
+            type: integer
+          description: The Game ID
   /ludo/game/{gameId}/movepiece:
     get:
       summary: Moves the piece and return new position
+      responses:
+        '200':
+          description: OK
+          content:
+            text/json:
+              schema:
+                type: integer 
       parameters:
-        - in: query
-          name: player
-          schema:
-            type: Objecet
+        - in: path
+          name: gameId 
           required: true
-          description: current player
+          schema:
+            type: integer
+          description: The Game ID
+        - in: query
+          name: playerid
+          required: true
+          schema:
+            type: integer
+          description: current playerid
         - in: query
           name: pieceID
           schema: 
             type: integer
           required: true
           description: the current moving piece
-        - in: query
-          name: numberoffields
-          schema:
-            type: integer                
+  /ludo/game/{gameId}/getwinner:
+    get:
+      summary: rturns the winner player
+      responses:
+        '200':
+          description: OK
+          content:
+              text/json:
+                 schema:
+                    type: object
+                    properties:
+                        PlayerID:
+                          type: integer
+                        Name:
+                          type: string
+                        PlayerColour:
+                          type: string
+                        Piece:
+                          type: array
+                          items: 
+                            type: object
+                            properties:
+                                position:
+                                  type: integer
+                                state:
+                                  type: string
+                                pieceId:
+                                  type: integer
+      parameters:
+        - in: path
+          name: gameId 
           required: true
-          description: numberoffields ??  
-         
+          schema:
+            type: integer
+          description: The Game ID
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/Teknikhogskola/Ludo/1.0.0
