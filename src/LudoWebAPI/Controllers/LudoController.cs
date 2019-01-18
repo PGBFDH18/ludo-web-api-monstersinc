@@ -12,9 +12,9 @@ namespace LudoWebAPI.Controllers
     {
         // GET api/ludo/newgame
         [HttpGet("newgame")]
-        public ActionResult<IEnumerable<string>> NewGame()
+        public void NewGame()
         {
-            return new string[] { "value1", "value2" };
+            Models.Game.CreateNewGame();            
         }
 
         // GET api/ludo/5
