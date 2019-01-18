@@ -7,9 +7,9 @@ namespace LudoGameEngine
 {
     public class LudoGame : ILudoGame
     {
-        private List<Player> _players = new List<Player>();
-        private GameState _gameState = GameState.NotStarted;
-        private int currentPlayerId = 0;
+        public List<Player> _players = new List<Player>();
+        public GameState _gameState = GameState.NotStarted;
+        public int currentPlayerId = 0;
         private IDiece _diece = new Diece();
        
 

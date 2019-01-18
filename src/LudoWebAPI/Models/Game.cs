@@ -8,14 +8,24 @@ namespace LudoWebAPI.Models
 {
     public class Game
     {
-        static List<ILudoGame> activeGames = new List<ILudoGame> { };
+        public static Dictionary<int, LudoGame> activeGames = new Dictionary<int, LudoGame> { };
 
-        public static void CreateNewGame()
+        public static int CreateNewGame()
         {
-            activeGames.Add(new LudoGame());
-        }
-    
+            int newId = 1;
 
-        
+            if (activeGames.Count > 0)
+            {
+                foreach (var pair in activeGames)
+                {
+                    if (pair.Key >= newId)
+                        newId = pair.Key + 1;
+                }
+            }
+            
+            activeGames.Add(newId, new LudoGame());
+
+            return newId;
+        }
     }
 }
