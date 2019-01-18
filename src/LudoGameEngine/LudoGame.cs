@@ -10,12 +10,8 @@ namespace LudoGameEngine
         private List<Player> _players = new List<Player>();
         private GameState _gameState = GameState.NotStarted;
         private int currentPlayerId = 0;
-        private IDiece _diece = null;
-
-        public LudoGame(IDiece diece)
-        {
-            _diece = diece;
-        }
+        private IDiece _diece = new Diece();
+       
 
         public Player AddPlayer(string name, PlayerColor color)
         {
@@ -143,8 +139,7 @@ namespace LudoGameEngine
             if (newPosition > 55)
             {
                 piece.State = PieceGameState.Goal;
-            }
-
+            }            
         }
 
         public int RollDiece()
