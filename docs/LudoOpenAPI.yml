@@ -7,17 +7,48 @@ info:
     email: contact@example.com
     url: https://example.com/
 paths:
-  /ludo/game/new:
+  /ludo:
     get:
+      summary: Returns active games
+      responses:
+        200:
+          description: Succesfull request
+        404:
+          description: Not found
+    post:
      summary: Starts new game
      responses:
-        '200':
-          description: OK          
-  /ludo/game/{gameId}/addplayer:
+        200:
+          description: "New game created. Game id: 2"
+
+  /ludo/{gameId}:
+    get:
+      summary: Returns active game by gameId
+      responses:
+        200:
+          description: Succesfull request
+        404:
+          description: Not found
+    delete:
+      summary: Deletes specific game
+      responses:
+        200:
+          description: Succesfull request
+        404:
+          description: Not found
+
+  /ludo/{gameId}/player:
+    get:
+      summary: Returns players in game
+      responses:
+        200:
+          description: Succesfull request
+        404:
+          description: Not found
     post:
       summary: Adds new player  
       responses:
-        '200':
+        200:
           description: OK  
       parameters:
         - in: path
@@ -25,15 +56,16 @@ paths:
           required: true
           schema:
             type: integer
-          description: The Game ID
+            description: The Game ID
         - in: query
-          name: playername
+          name: name
+          required: true
           schema:
             type: string
-          required: true
-          description: Name of player to set
+            description: Name of player to set
         - in: query
-          name: playercolor
+          name: color
+          required: true
           schema:
             type: string
             enum:
@@ -41,13 +73,33 @@ paths:
               - green
               - blue
               - yellow
+            description: color of player to set
+
+  /ludo/{gameId}/player/{playerId}:
+    get:
+      summary: Return specific player
+      responses:
+        200:
+          description: Succesfull request
+      parameters:
+        - in: path
+          name: gameId
           required: true
-          description: color of player to set
-  /ludo/game/{gameId}/roll:
+          schema:
+            type: integer
+            description: ID of specific game
+        - in: path
+          name: playerId
+          required: true
+          schema:
+            type: integer
+            description: ID of specific player
+
+  /ludo/{gameId}/roll:
     get:
       summary: Rolls the die and return what number it gave.
       responses:
-        '200':
+        200:
           description: OK
           content:
             text/json:
@@ -60,11 +112,11 @@ paths:
           schema:
             type: integer
           description: The Game ID
-  /ludo/game/{gameId}/movepiece:
+  /ludo/{gameId}/movepiece:
     put:
       summary: Moves the piece and return new position
       responses:
-        '200':
+        200:
           description: OK
           content:
             text/json:
@@ -89,11 +141,11 @@ paths:
             type: integer
           required: true
           description: the current moving piece
-  /ludo/game/{gameId}/getwinner:
+  /ludo/{gameId}/getwinner:
     get:
       summary: rturns the winner player
       responses:
-        '200':
+        200:
           description: OK
           content:
               text/json:

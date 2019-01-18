@@ -48,10 +48,10 @@ namespace LudoWebAPI.Controllers
 
         // POST api/ludo/2/player?brad&0
         [HttpPost("{gameId}/player")]
-        public ObjectResult AddPlayer(int gameId, string name, PlayerColor number)
+        public ObjectResult AddPlayer(int gameId, string name, PlayerColor color)
         {
-            Game.activeGames[gameId].AddPlayer(name, number);
-            return Ok(name + "(" + number + ") added to Game " + gameId);
+            Game.activeGames[gameId].AddPlayer(name, color);
+            return Ok(name + "(" + color + ") added to Game " + gameId);
         }
 
         // GET api/ludo/2/player/2
