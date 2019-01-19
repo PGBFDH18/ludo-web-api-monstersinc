@@ -7,48 +7,124 @@ info:
     email: contact@example.com
     url: https://example.com/
 paths:
-  /ludo:
+  /api/ludo:
     get:
-      summary: Returns active games
-      responses:
-        200:
-          description: Succesfull request
-        404:
-          description: Not found
+     summary: returns all active games on the server at the time of request
+     responses:
+        '200':
+          description: OK  
+          content:
+            text/json:
+              schema:
+                type: array
+                items:
+                 type: object
+                 properties:
+                   id: 
+                    type: integer
+                   ludogame:
+                      type: object
+                      properties:
+                       _players: 
+                         type: array
+                         items:
+                           type: object
+                           properties:
+                             PlayerID:
+                               type: integer
+                             Name:
+                                type: string
+                             PlayerColour:
+                                type: string  
+                                enum: [red, green, blue, yellow]
+                             Piece:
+                                type: array
+                                items: 
+                                    type: object
+                                    properties:
+                                       position:
+                                         type: integer
+                                       state:
+                                         type: string
+                                       pieceId:
+                                         type: integer 
+                       _gamestate:
+                          type: string
+                          enum: [ Started, NotStarted, Ended]
+                       currentPlayerId:
+                          type: integer
+                       _diece:
+                          type: object
     post:
      summary: Starts new game
      responses:
-        200:
-          description: "New game created. Game id: 2"
-
-  /ludo/{gameId}:
+        '200':
+          description: OK  
+  /api/ludo/{gameId}:
     get:
-      summary: Returns active game by gameId
-      responses:
-        200:
-          description: Succesfull request
-        404:
-          description: Not found
+     summary: return active Game by ID
+     responses:
+        '200':
+          description: OK
+          content:
+             text/json:
+               schema:
+                 type: object
+                 properties:
+                       _players: 
+                         type: array
+                         items:
+                           type: object
+                           properties:
+                             PlayerID:
+                               type: integer
+                             Name:
+                                type: string
+                             PlayerColour:
+                                type: string  
+                                enum: [red, green, blue, yellow]
+                             Piece:
+                                type: array
+                                items: 
+                                    type: object
+                                    properties:
+                                       position:
+                                         type: integer
+                                       state:
+                                         type: string
+                                       pieceId:
+                                         type: integer 
+                       _gamestate:
+                          type: string
+                          enum: [ Started, NotStarted, Ended]
+                       currentPlayerId:
+                          type: integer
+                       _diece:
+                          type: object
+     parameters:
+       - in: path
+         name: gameId 
+         required: true
+         schema:
+          type: integer
+          description: The Game ID
     delete:
-      summary: Deletes specific game
-      responses:
-        200:
-          description: Succesfull request
-        404:
-          description: Not found
-
-  /ludo/{gameId}/player:
-    get:
-      summary: Returns players in game
-      responses:
-        200:
-          description: Succesfull request
-        404:
-          description: Not found
+     summary: delete active game by id
+     responses:
+        '200':
+          description: OK
+     parameters:
+       - in: path
+         name: gameId 
+         required: true
+         schema:
+          type: integer
+          description: The Game ID
+  /api/ludo/{gameId}/addplayer:
     post:
       summary: Adds new player  
       responses:
-        200:
+        '200':
           description: OK  
       parameters:
         - in: path
@@ -56,50 +132,105 @@ paths:
           required: true
           schema:
             type: integer
-            description: The Game ID
+          description: The Game ID
         - in: query
-          name: name
-          required: true
+          name: playername
           schema:
             type: string
-            description: Name of player to set
-        - in: query
-          name: color
           required: true
+          description: Name of player to set
+        - in: query
+          name: playercolor
           schema:
             type: string
-            enum:
-              - red
-              - green
-              - blue
-              - yellow
-            description: color of player to set
-
-  /ludo/{gameId}/player/{playerId}:
-    get:
-      summary: Return specific player
+            enum: [red, green blue, yellow]
+          required: true
+          description: color of player to set
+  /api/{gameId}/players:
+     get:
+      summary: returns all players in an active game by  game ID
       responses:
-        200:
-          description: Succesfull request
+        '200':
+          description: OK
+          content: 
+            text/json:
+              schema:
+                 type: array
+                 items:
+                  type: object
+                  properties:
+                     PlayerID:
+                        type: integer
+                     Name:
+                        type: string
+                     PlayerColour:
+                        type: string  
+                        enum: [red, green, blue, yellow]
+                     Piece:
+                       type: array
+                       items: 
+                        type: object
+                        properties:
+                           position:
+                             type: integer
+                           state:
+                             type: string
+                           pieceId:
+                             type: integer 
       parameters:
         - in: path
           name: gameId
           required: true
           schema:
             type: integer
-            description: ID of specific game
+          description: The Game ID
+  /api/{gameId}/player/{playerId}:
+    get:
+      summary: returns a player using an id
+      responses:
+        '200':
+          description: OK
+          content: 
+            text/json:
+              schema:
+                 type: object
+                 properties:
+                     PlayerID:
+                        type: integer
+                     Name:
+                        type: string
+                     PlayerColour:
+                        type: string  
+                        enum: [red, green, blue, yellow]
+                     Piece:
+                       type: array
+                       items: 
+                        type: object
+                        properties:
+                           position:
+                             type: integer
+                           state:
+                             type: string
+                           pieceId:
+                             type: integer 
+      parameters:
+        - in: path
+          name: gameId
+          required: true
+          schema:
+            type: integer
+          description: The Game ID
         - in: path
           name: playerId
           required: true
           schema:
             type: integer
-            description: ID of specific player
-
-  /ludo/{gameId}/roll:
+          description: The Palyer ID
+  /api/ludo/{gameId}/roll:
     get:
       summary: Rolls the die and return what number it gave.
       responses:
-        200:
+        '200':
           description: OK
           content:
             text/json:
@@ -112,16 +243,12 @@ paths:
           schema:
             type: integer
           description: The Game ID
-  /ludo/{gameId}/movepiece:
-    put:
-      summary: Moves the piece and return new position
+  /api/ludo/{gameId}/movepiece:
+    get:
+      summary: Moves the piece
       responses:
-        200:
+        '200':
           description: OK
-          content:
-            text/json:
-              schema:
-                type: integer 
       parameters:
         - in: path
           name: gameId 
@@ -130,22 +257,47 @@ paths:
             type: integer
           description: The Game ID
         - in: query
-          name: playerid
+          name: player
           required: true
           schema:
-            type: integer
-          description: current playerid
+             type: object
+             properties:
+                 PlayerID:
+                    type: integer
+                 Name:
+                    type: string
+                 PlayerColour:
+                    type: string  
+                    enum: [red, green, blue, yellow]
+                 Piece:
+                    type: array
+                    items: 
+                        type: object
+                        properties:
+                           position:
+                             type: integer
+                           state:
+                             type: string
+                           pieceId:
+                             type: integer
+          description: current player
         - in: query
           name: pieceID
           schema: 
             type: integer
           required: true
-          description: the current moving piece
-  /ludo/{gameId}/getwinner:
+          description: the piece to move after dice roll 
+        - in: query
+          name: steps
+          schema: 
+            type: integer
+          required: true
+          description: resulf of dice roll
+  /api/ludo/{gameId}/getwinner:
     get:
       summary: rturns the winner player
       responses:
-        200:
+        '200':
           description: OK
           content:
               text/json:
@@ -157,7 +309,8 @@ paths:
                         Name:
                           type: string
                         PlayerColour:
-                          type: string
+                          type: string 
+                          enum: [red, green, blue, yellow]
                         Piece:
                           type: array
                           items: 

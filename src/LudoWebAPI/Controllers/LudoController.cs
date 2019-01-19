@@ -26,24 +26,24 @@ namespace LudoWebAPI.Controllers
             return Ok();
         }
         // GET api/ludo/2
-        [HttpGet("{id}")]
-        public LudoGame GetGame(int id)
+        [HttpGet("{gameId}")]
+        public LudoGame GetGame(int gameId)
         {
-            return Game.activeGames[id];
+            return Game.activeGames[gameId];
         }
         // DELETE api/ludo/2
-        [HttpDelete("{id}")]
-        public OkResult Delete(int id)
+        [HttpDelete("{gameId}")]
+        public OkResult Delete(int gameId)
         {
-            Game.activeGames.Remove(id);
+            Game.activeGames.Remove(gameId);
             return Ok();
         }
 
         // GET api/ludo/2/player
-        [HttpGet("{gameId}/player")]
-        public List<Player> GetPlayers(int gameId)
+        [HttpGet("{gameId}/players")]
+        public Player[] GetPlayers(int gameId)
         {
-            return Game.activeGames[gameId]._players;
+            return Game.activeGames[gameId].GetPlayers();
         }
 
         // POST api/ludo/2/player?name=Brad&color=red
