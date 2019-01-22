@@ -107,6 +107,12 @@ namespace LudoWebAPI.Controllers
         public ActionResult<Player> GetPlayer(int gameId, int playerId)
         {
             var game = (LudoGame)Game.activeGames[gameId];
+
+            if (game.GetPlayers().Count() == 0)
+            {
+                return NotFound("This game has no players yet");
+            }
+
             return Ok(game._players[playerId]);
         }
     }
