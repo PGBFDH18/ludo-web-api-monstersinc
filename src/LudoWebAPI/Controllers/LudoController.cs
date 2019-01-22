@@ -17,6 +17,9 @@ namespace LudoWebAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Dictionary<int, ILudoGame>>> GetGames()
         {
+            if (Game.activeGames.Count() == 0)
+                return NotFound("No games are running at the moment");
+
             return Ok(Game.activeGames);
         }
 
@@ -32,6 +35,9 @@ namespace LudoWebAPI.Controllers
         [HttpGet("{gameId}")]
         public ActionResult<LudoGame> GetGame(int gameId)
         {
+            if (gameId > Game.activeGames.Count || gameId < 1)
+                return BadRequest("gameId is out of range");
+
             return Ok((LudoGame)Game.activeGames[gameId]);
         }
 
@@ -39,6 +45,9 @@ namespace LudoWebAPI.Controllers
         [HttpPut("{gameId}")]
         public ActionResult<bool> StartGame(int gameId)
         {
+            if (gameId > Game.activeGames.Count || gameId < 1)
+                return BadRequest("gameId is out of range");
+
             var gameState = Game.activeGames[gameId].GetGameState();
 
             if (gameState != GameState.NotStarted)
@@ -64,7 +73,10 @@ namespace LudoWebAPI.Controllers
         // DELETE api/ludo/2
         [HttpDelete("{gameId}")]
         public ActionResult<string> Delete(int gameId)
-        {
+        {   
+            if (gameId > Game.activeGames.Count || gameId < 1)            
+                return BadRequest("gameId is out of range");
+            
             Game.activeGames.Remove(gameId);
             return Ok("Game " + gameId + " deleted.");
         }
@@ -73,6 +85,9 @@ namespace LudoWebAPI.Controllers
         [HttpGet("{gameId}/roll")]
         public ActionResult<int> RollDiece(int gameId)
         {
+            if (gameId > Game.activeGames.Count || gameId < 1)
+                return BadRequest("gameId is out of range");
+
             var game = Game.activeGames[gameId];
             var state = game.GetGameState();
 
@@ -88,6 +103,9 @@ namespace LudoWebAPI.Controllers
         [HttpGet("{gameId}/state")]
         public ActionResult<int> GetGameState(int gameId)
         {
+            if (gameId > Game.activeGames.Count || gameId < 1)
+                return BadRequest("gameId is out of range");
+
             return Ok(Game.activeGames[gameId].GetGameState());
         }
 
@@ -95,6 +113,9 @@ namespace LudoWebAPI.Controllers
         [HttpPut("{gameId}/movepiece")]
         public ActionResult<string> MovePiece(int gameId, int pieceId, int roll)
         {
+            if (gameId > Game.activeGames.Count || gameId < 1)
+                return BadRequest("gameId is out of range");
+
             var game = Game.activeGames[gameId];
             var state = game.GetGameState();
 
@@ -135,20 +156,52 @@ namespace LudoWebAPI.Controllers
             }
 
             return Ok("Piece moved");
+        }
 
+        // GET api/ludo/2/allpieces
+        [HttpGet("{gameId}/allpieces")]
+        public ActionResult<Piece[]> GetAllPieces(int gameId)
+        {
+            if (gameId > Game.activeGames.Count || gameId < 1)
+                return BadRequest("gameId is out of range");
+
+            var game = Game.activeGames[gameId];
+            return Ok(game.GetAllPiecesInGame());            
         }
 
         // GET api/ludo/2/player
         [HttpGet("{gameId}/player")]
         public ActionResult<IEnumerable<Player[]>> GetPlayers(int gameId)
         {
+            if (gameId > Game.activeGames.Count || gameId < 1)
+                return BadRequest("gameId is out of range");
+
             return Ok(Game.activeGames[gameId].GetPlayers());
+        }
+
+        // GET api/ludo/2/winner
+        [HttpGet("{gameId}/winner")]
+        public ActionResult<Player> GetWinner(int gameId)
+        {
+            if (gameId > Game.activeGames.Count || gameId < 1)
+                return BadRequest("gameId is out of range");
+
+            var player = Game.activeGames[gameId].GetWinner();
+
+            if(player == null)
+            {
+                return NotFound("No winner found");
+            }
+            return Ok("Winner Found");
         }
 
         // POST api/ludo/2/player?name=Brad&color=red
         [HttpPost("{gameId}/player")]
         public ActionResult<string> AddPlayer(int gameId, string name, PlayerColor color)
         {
+            if (gameId > Game.activeGames.Count || gameId < 1)
+                return BadRequest("gameId is out of range");
+
             var gameState = Game.activeGames[gameId].GetGameState();
             if (gameState != GameState.NotStarted)
             {
@@ -168,6 +221,9 @@ namespace LudoWebAPI.Controllers
         [HttpGet("{gameId}/player/{playerId}")]
         public ActionResult<Player> GetPlayer(int gameId, int playerId)
         {
+            if (gameId > Game.activeGames.Count || gameId < 1)
+                return BadRequest("gameId is out of range");
+
             var players = Game.activeGames[gameId].GetPlayers();
 
             if (players.Count() == 0)
@@ -175,19 +231,25 @@ namespace LudoWebAPI.Controllers
                 return NotFound("This game has no players yet");
             }
 
+            if (playerId > (players.Count() -1) || playerId < 0)
+                return BadRequest("playerId is out of range");
+
             return Ok(players[playerId]);
         }
 
         // GET api/ludo/2/player/current
         [HttpGet("{gameId}/player/current")]
-        public ActionResult<string> GetCurrentPlayer(int gameId)
+        public ActionResult<Player> GetCurrentPlayer(int gameId)
         {
+            if (gameId > Game.activeGames.Count || gameId < 1)
+                return BadRequest("gameId is out of range");
+
             if (Game.activeGames[gameId].GetGameState() == GameState.NotStarted)
             {
                 return NotFound("The game has not started yet");
             }
 
-            return Ok(Game.activeGames[gameId].GetCurrentPlayer().Name);
+            return Ok(Game.activeGames[gameId].GetCurrentPlayer());
         }
     }
 }
