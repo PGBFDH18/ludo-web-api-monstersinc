@@ -14,7 +14,7 @@ namespace LudoWebAPI.Controllers
     {
         // GET api/ludo
         [HttpGet]
-        public Dictionary<int, LudoGame> GetGames()
+        public Dictionary<int, ILudoGame> GetGames()
         {
             return Game.activeGames;
         }
@@ -29,7 +29,7 @@ namespace LudoWebAPI.Controllers
         [HttpGet("{gameId}")]
         public LudoGame GetGame(int gameId)
         {
-            return Game.activeGames[gameId];
+            return (LudoGame)Game.activeGames[gameId];
         }
         // DELETE api/ludo/2
         [HttpDelete("{gameId}")]
@@ -58,7 +58,8 @@ namespace LudoWebAPI.Controllers
         [HttpGet("{gameId}/player/{playerId}")]
         public Player GetPlayer(int gameId, int playerId)
         {
-            return Game.activeGames[gameId]._players[playerId];
+            var game = (LudoGame)Game.activeGames[gameId];
+            return game._players[playerId];
         }
     }
 }
