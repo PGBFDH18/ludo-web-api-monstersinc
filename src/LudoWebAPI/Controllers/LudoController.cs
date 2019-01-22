@@ -137,6 +137,7 @@ namespace LudoWebAPI.Controllers
             return Ok("Piece moved");
 
         }
+
         // GET api/ludo/2/player
         [HttpGet("{gameId}/player")]
         public ActionResult<IEnumerable<Player[]>> GetPlayers(int gameId)
