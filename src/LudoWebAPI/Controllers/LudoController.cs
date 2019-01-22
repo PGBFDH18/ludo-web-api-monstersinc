@@ -127,9 +127,16 @@ namespace LudoWebAPI.Controllers
 
             game.EndTurn(player);
 
-            return Ok("Piece moved");
-        }
+            player = Game.activeGames[gameId].GetWinner();
 
+            if (player != null)
+            {
+                return Ok("Piece moved and we have a winner. The winner is " + player.Name);
+            }
+
+            return Ok("Piece moved");
+
+        }
         // GET api/ludo/2/player
         [HttpGet("{gameId}/player")]
         public ActionResult<IEnumerable<Player[]>> GetPlayers(int gameId)
