@@ -41,7 +41,7 @@ namespace LudoWebAPI.Controllers
         {
             var gameState = Game.activeGames[gameId].GetGameState();
 
-            if (gameState == GameState.NotStarted)
+            if (gameState != GameState.NotStarted)
             {
                 return NotFound("Unable to start game since it has the state " + gameState + ". Only NotStarted games can be started");
             }
@@ -106,14 +106,26 @@ namespace LudoWebAPI.Controllers
         [HttpGet("{gameId}/player/{playerId}")]
         public ActionResult<Player> GetPlayer(int gameId, int playerId)
         {
-            var game = (LudoGame)Game.activeGames[gameId];
+            var players = Game.activeGames[gameId].GetPlayers();
 
-            if (game.GetPlayers().Count() == 0)
+            if (players.Count() == 0)
             {
                 return NotFound("This game has no players yet");
             }
 
-            return Ok(game._players[playerId]);
+            return Ok(players[playerId]);
+        }
+
+        // GET api/ludo/2/player/current
+        [HttpGet("{gameId}/player/current")]
+        public ActionResult<string> GetCurrentPlayer(int gameId)
+        {
+            if (Game.activeGames[gameId].GetGameState() == GameState.NotStarted)
+            {
+                return NotFound("The game has not started yet");
+            }
+
+            return Ok(Game.activeGames[gameId].GetCurrentPlayer().Name);
         }
     }
 }
