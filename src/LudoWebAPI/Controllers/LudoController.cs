@@ -39,13 +39,23 @@ namespace LudoWebAPI.Controllers
         [HttpPut("{gameId}")]
         public ActionResult<bool> StartGame(int gameId)
         {
-            if (Game.activeGames[gameId].GetPlayers().Length < 2)
+            var gameState = Game.activeGames[gameId].GetGameState();
+
+            if (gameState == GameState.NotStarted)
             {
-                return NotFound("Players cannot be less than 2.");
+                return NotFound("Unable to start game since it has the state " + gameState + ". Only NotStarted games can be started");
             }
-            else if (Game.activeGames[gameId].GetPlayers().Length > 4)
+
+            var players = Game.activeGames[gameId].GetPlayers();
+
+            if (players.Count() < 2)
             {
-                return NotFound("Players cannot be more than 4.");
+                return NotFound("Atleast two players is needed to start the game");
+            }
+
+            if (players.Count() > 4)
+            {
+                return NotFound("A max of four players can be in the game");
             }
 
             return Ok(Game.activeGames[gameId].StartGame());
@@ -77,7 +87,18 @@ namespace LudoWebAPI.Controllers
         [HttpPost("{gameId}/player")]
         public ActionResult<string> AddPlayer(int gameId, string name, PlayerColor color)
         {
-            Game.activeGames[gameId].AddPlayer(name, color);
+            var gameState = Game.activeGames[gameId].GetGameState();
+            if (gameState != GameState.NotStarted)
+            {
+                return NotFound("Unable to add player since game is " + gameState);
+            }
+
+            var player = Game.activeGames[gameId].AddPlayer(name, color);
+            if (player == null)
+            {
+                return NotFound("The color is already used by another player");
+            }
+
             return Ok("New player added. Name: " + name + ", Color: " + color);
         }
 
