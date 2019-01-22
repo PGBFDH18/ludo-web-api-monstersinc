@@ -69,11 +69,65 @@ namespace LudoWebAPI.Controllers
             return Ok("Game " + gameId + " deleted.");
         }
 
+        // GET api/ludo/2/roll
+        [HttpGet("{gameId}/roll")]
+        public ActionResult<int> RollDiece(int gameId)
+        {
+            var game = Game.activeGames[gameId];
+            var state = game.GetGameState();
+
+            if (state != GameState.Started)
+            {
+                return NotFound("Unable roll diece since the game is not started, it's current state is: " + state);
+            }
+
+            return Ok(game.RollDiece());
+        }
+
         // GET api/ludo/2/state
         [HttpGet("{gameId}/state")]
         public ActionResult<int> GetGameState(int gameId)
         {
             return Ok(Game.activeGames[gameId].GetGameState());
+        }
+
+        // PUT api/ludo/2/movepiece?pieceId=2&roll=4
+        [HttpPut("{gameId}/movepiece")]
+        public ActionResult<string> MovePiece(int gameId, int pieceId, int roll)
+        {
+            var game = Game.activeGames[gameId];
+            var state = game.GetGameState();
+
+            if (state == GameState.Ended)
+            {
+                return NotFound("Game is ended, and a winner is found");
+            }
+
+            if (state == GameState.NotStarted)
+            {
+                return NotFound("Game is not yet started, please start the game");
+            }
+
+            Player player = game.GetCurrentPlayer();
+            var piece = player.Pieces.First(p => p.PieceId == pieceId);
+
+            if (piece.State == PieceGameState.Goal)
+            {
+                return NotFound("Piece is in Goal and unable to move");
+            }
+
+            game.MovePiece(player, pieceId, roll);
+
+            int currentPlayerId = game.GetCurrentPlayer().PlayerId;
+
+            if (player.PlayerId != currentPlayerId)
+            {
+                return NotFound("Wrong player, it's currently " + currentPlayerId);
+            }
+
+            game.EndTurn(player);
+
+            return Ok("Piece moved");
         }
 
         // GET api/ludo/2/player
@@ -127,5 +181,11 @@ namespace LudoWebAPI.Controllers
 
             return Ok(Game.activeGames[gameId].GetCurrentPlayer().Name);
         }
+
+
+        /*ludoGame.MovePiece(currentPlayer, pieceIdToMove, dieceResult);
+                ludoGame.EndTurn(currentPlayer);*/
+
+
     }
 }
