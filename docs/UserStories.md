@@ -1,6 +1,6 @@
-#### User stories
+## User stories
 
-###### As a front-end developer for Ludo I would like to...
+#### As a front-end developer for Ludo I would like to...
 
 POST
 
