@@ -8,7 +8,7 @@ namespace LudoWebAPI.Models
 {
     public class Game
     {
-        public static Dictionary<int, LudoGame> activeGames = new Dictionary<int, LudoGame> { };
+        public static Dictionary<int, ILudoGame> activeGames = new Dictionary<int, ILudoGame> { };
 
         public static int CreateNewGame()
         {
