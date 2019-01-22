@@ -11,7 +11,11 @@ namespace LudoGameEngine
         public GameState _gameState = GameState.NotStarted;
         public int currentPlayerId = 0;
         private IDiece _diece = new Diece();
-       
+
+        public LudoGame(IDiece diece)
+        {
+            _diece = diece;
+        }
 
         public Player AddPlayer(string name, PlayerColor color)
         {

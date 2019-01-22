@@ -23,7 +23,7 @@ namespace LudoWebAPI.Models
                 }
             }
             
-            activeGames.Add(newId, new LudoGame());
+            activeGames.Add(newId, new LudoGame(new Diece()));
 
             return newId;
         }
