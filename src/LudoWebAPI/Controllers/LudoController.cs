@@ -181,11 +181,5 @@ namespace LudoWebAPI.Controllers
 
             return Ok(Game.activeGames[gameId].GetCurrentPlayer().Name);
         }
-
-
-        /*ludoGame.MovePiece(currentPlayer, pieceIdToMove, dieceResult);
-                ludoGame.EndTurn(currentPlayer);*/
-
-
     }
 }
