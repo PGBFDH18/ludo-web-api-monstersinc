@@ -4,22 +4,28 @@
 
 POST
 
-- Start a new game
-- Add player names and color
+- create a new game
+- Add new player
 
 GET
 
-- Get information about all games
-- Get information about Players: names and color.
-- Get information about pieces: location and if they are in goal or not.
+- Get info about all games
+- Get info about a specific game
+- Get info about Players: names and color.
+- Get info about a specific player
+- Get info about pieces: location and if they are in goal or not.
 - Get a new die roll.
 - Get Game state
-- Get current player
+- Get info about current player
+- Get info about all pieces in an active game
+- Get info about the winner
 
 PUT
 
 - Change piece positions
+- start the game 
+- End turn and check for winner
 
 DELETE
 
-- Delete active games
+- Delete an active game
