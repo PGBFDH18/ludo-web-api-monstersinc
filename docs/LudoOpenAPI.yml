@@ -20,6 +20,8 @@ paths:
     get:
      summary: returns all active games on the server at the time of request
      responses:
+        '400':
+          description: NotFound, No running games 
         '200':
           description: OK  
           content:
