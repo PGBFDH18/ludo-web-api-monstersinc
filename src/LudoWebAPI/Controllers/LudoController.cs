@@ -73,7 +73,7 @@ namespace LudoWebAPI.Controllers
         // DELETE api/ludo/2
         [HttpDelete("{gameId}")]
         public ActionResult<string> Delete(int gameId)
-        {   
+        {
             if (gameId > Game.activeGames.Count || gameId < 1)            
                 return BadRequest("gameId is out of range");
             
@@ -110,6 +110,8 @@ namespace LudoWebAPI.Controllers
         }
 
         // PUT api/ludo/2/movepiece?pieceId=2&roll=4
+        // This call runs both MovePiece, EndTurn and GetWinner from engine.
+        // There's actually no action required from the user to make these methods run.
         [HttpPut("{gameId}/movepiece")]
         public ActionResult<string> MovePiece(int gameId, int pieceId, int roll)
         {
