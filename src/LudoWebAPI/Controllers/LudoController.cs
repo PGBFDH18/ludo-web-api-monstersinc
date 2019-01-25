@@ -96,7 +96,7 @@ namespace LudoWebAPI.Controllers
 
         // GET api/ludo/2/state
         [HttpGet("{gameId}/state")]
-        public ActionResult<int> GetGameState(int gameId)
+        public ActionResult<string> GetGameState(int gameId)
         {
             if (!Game.activeGames.ContainsKey(gameId))
                 return NotFound("gameId is not found");
@@ -104,6 +104,7 @@ namespace LudoWebAPI.Controllers
             return Ok(Game.activeGames[gameId].GetGameState());
         }
         
+        // PUT api/ludo/2/movepiece?pieceId=1&roll=4
         [HttpPut("{gameId}/movepiece")]
         public ActionResult<string> MovePiece(int gameId, int pieceId, int roll)
         {
@@ -227,7 +228,7 @@ namespace LudoWebAPI.Controllers
 
         // GET api/ludo/2/winner
         [HttpGet("{gameId}/winner")]
-        public ActionResult<Player> GetWinner(int gameId)
+        public ActionResult<bool> GetWinner(int gameId)
         {
             if (!Game.activeGames.ContainsKey(gameId))
                 return NotFound("gameId is not found");
@@ -236,9 +237,9 @@ namespace LudoWebAPI.Controllers
 
             if(player == null)
             {
-                return NotFound("No winner found");
+                return NotFound(false);
             }
-            return Ok("Winner Found");
+            return Ok(true);
         }
 
         // GET api/ludo/2/player/2
