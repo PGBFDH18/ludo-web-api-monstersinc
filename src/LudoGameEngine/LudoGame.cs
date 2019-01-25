@@ -99,10 +99,18 @@ namespace LudoGameEngine
         {
             return _players.Where(p => p.PlayerId == currentPlayerId).FirstOrDefault();
         }
+        public void SetCurrentPlayer(int id)
+        {
+            currentPlayerId = id;
+        }
 
         public GameState GetGameState()
         {
             return _gameState;
+        }
+        public void SetGameState(int state)
+        {
+            _gameState = (GameState)state;
         }
 
         public Player[] GetPlayers()
