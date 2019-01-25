@@ -176,6 +176,9 @@ namespace LudoWebAPI.Controllers
         [HttpPost("{gameId}/player")]
         public ActionResult<string> AddPlayer(int gameId, string name, PlayerColor color)
         {
+            if (name == null)
+                return BadRequest("Invalid name");
+
             if (!Game.activeGames.ContainsKey(gameId))
                 return NotFound("gameId is not found");
 
