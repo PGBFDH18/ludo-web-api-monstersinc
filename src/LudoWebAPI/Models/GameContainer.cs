@@ -1,58 +1,32 @@
-﻿using LudoGameEngine;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using LudoGameEngine;
+
 namespace LudoWebAPI.Models
 {
-
-    /// <summary>
-    /// This class creates a collection of games
-    /// </summary>
-    public class GameContainer : IGameContainer
+    public interface IGameContainer
     {
-        private readonly Dictionary<int, ILudoGame> _activeGames;
-        private readonly IDiece _diece;
+        Dictionary<int, ILudoGame> Gamesloader();
+    }
+   
 
-        /// <summary>
-        /// A constructor that inisiate other classes through DI
-        /// </summary>
-        /// <param name="diece"></param>
-        /// <param name="ludoGame"></param>        
-        public GameContainer(IDiece diece)
+    public class GameContainer: IGameContainer
+    {
+        private Dictionary<int, ILudoGame> _activeGames;
+
+        // constructor that instansiate the dictionary 
+        public GameContainer()
         {
-            _diece = diece;
-            _activeGames = new Dictionary<int, ILudoGame>();            
-           
-
+            _activeGames = new Dictionary<int, ILudoGame>();
         }
 
-        /// <summary>
-        /// Returns list of active games 
-        /// </summary>
-        /// <returns>List of active games</returns>
+        // rutuns the dictionary
         public Dictionary<int, ILudoGame> Gamesloader()
         {
-
+            
             return _activeGames;
-        }
-
-        /// <summary>
-        /// Creates new game 
-        /// </summary>
-        public void AddNewGame()
-        {
-            int newId = 1;
-
-            //sets an incrimenting id for each new game
-            if (_activeGames.Count > 0)
-            {
-                foreach (var pair in _activeGames)
-                {
-                    if (pair.Key >= newId)
-                        newId = pair.Key + 1;
-                }
-            }
-            _activeGames.Add(newId, new LudoGame(_diece));
-        }
-
-
+        }        
     }
 }

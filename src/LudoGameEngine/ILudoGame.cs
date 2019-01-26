@@ -6,6 +6,7 @@ namespace LudoGameEngine
         Player AddPlayer(string name, PlayerColor color);
         Player[] GetPlayers();
         GameState GetGameState();
+        //void StartTurn(Player player);
 
         int RollDiece();
 

@@ -1,31 +1,31 @@
 ## User stories
 
-#### As a Ludo API consumer I would like to...
+#### As a front-end developer for Ludo I would like to...
 
 POST
 
--  new game
--  new player
+- create a new game
+- Add new player
 
 GET
 
--  info about all games
-- info about a specific game
-- info about Players
-- info about a specific player
-- info about pieces
-- a new die roll
-- Game state
-- info about current player
-- info about all pieces in an active game
-- info about the winner
+- Get info about all games
+- Get info about a specific game
+- Get info about Players: names and color.
+- Get info about a specific player
+- Get info about pieces: location and if they are in goal or not.
+- Get a new die roll.
+- Get Game state
+- Get info about current player
+- Get info about all pieces in an active game
+- Get info about the winner
 
 PUT
 
-- piece positions
-- the game on
+- Change piece positions
+- start the game 
 - End turn and check for winner
 
 DELETE
 
-- an active game
+- Delete an active game
