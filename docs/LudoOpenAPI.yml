@@ -4,8 +4,6 @@ info:
   version: "1.0.0"
   contact:
     name: Team MonstersINC
-    email: contact@example.com
-    url: https://example.com/
 components:
   parameters:
     gameIdParameter:
@@ -172,53 +170,28 @@ paths:
       summary: Moves the piece
       responses:
         '404':
-          description: NotFound, game not found
+          description: NotFound, game not foundr
         '401':
           description: Unauthorized, Game is not started
+                       Unauthorized, Invalid PiceID, must be between 0 and 3
                        Unauthorized, game ended and winner is found
-                       Unauthorized, Pice in Goal
+                       Unauthorized, Piece in Goal
         '200':
-          description: OK, Pice Moved
-                       OK, returns the winner name
-                      
+          description: OK, Piece Moved
+                       OK, returns the winner name                      
       parameters:
         - in: query
-          name: player
+          name: PeiceId
           required: true
           schema:
-             type: object
-             properties:
-                 PlayerID:
-                    type: integer
-                 Name:
-                    type: string
-                 PlayerColour:
-                    type: string  
-                    enum: [red, green, blue, yellow]
-                 Piece:
-                    type: array
-                    items: 
-                        type: object
-                        properties:
-                           position:
-                             type: integer
-                           state:
-                             type: string
-                           pieceId:
-                             type: integer
-          description: current player
+             type: integer             
+          description: Piece to move
         - in: query
-          name: pieceID
+          name: roll
           schema: 
             type: integer
           required: true
-          description: the piece to move after dice roll 
-        - in: query
-          name: steps
-          schema: 
-            type: integer
-          required: true
-          description: resulf of dice roll
+          description: returns the outcome of the diece roll         
   /api/ludo/{gameId}/allpieces:
     parameters: 
       - $ref: '#/components/parameters/gameIdParameter'
@@ -431,3 +404,7 @@ paths:
           schema:
             type: integer
           description: The Palyer ID
+  
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/Teknikhogskola/Ludo/1.0.0
