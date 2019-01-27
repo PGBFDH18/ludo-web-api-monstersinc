@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace LudoAPITest
 {
-    public class UnitTest1
+    public class UnitTests
     {
         IGameContainer _gameContainer;
         LudoController _ludoController;
@@ -18,14 +18,14 @@ namespace LudoAPITest
             _gameContainer.Gamesloader().Clear();
         } 
 
-        public UnitTest1()
+        public UnitTests()
         {
             _gameContainer = new FakeGameContainer();
             _ludoController = new LudoController(_gameContainer);
         }
 
         [Fact]
-        public void GetAllActiveGames_GameListISEmpty_ReturnsNotFoundResult()
+        public void GetGames_GameListISEmpty_ReturnsNotFoundResult()
         {
             // Arrange
             EmptyGameList();
@@ -38,7 +38,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetAllActiveGames_GameListIsNotEmpty_ReturnsOKdResult()
+        public void GetGames_GameListIsNotEmpty_ReturnsOKdResult()
         {
             // Act
             var okResult = _ludoController.GetGames();
@@ -48,7 +48,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetAllActiveGames_GameListIsNotEmpty_ReturnsListofActiveGames()
+        public void GetGames_GameListIsNotEmpty_ReturnsListofActiveGames()
         {
             // Act
             var okResult = _ludoController.GetGames().Result as OkObjectResult;
@@ -59,7 +59,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void CreateNewGame_AddNewGame_ReturnsOKdResult()
+        public void NewGame_AddNewGame_ReturnsOKdResult()
         {
             // Act
             var okResult = _ludoController.NewGame();
@@ -68,8 +68,10 @@ namespace LudoAPITest
             Assert.IsType<OkObjectResult>(okResult.Result);
         }
 
+
+        // Gets a specific Active game by Id
         [Fact]
-        public void GetAtiveGameById_NotValidGameId_ReturnsNotFoundResult()
+        public void GetGame_NotValidGameId_ReturnsNotFoundResult()
         {
             // Arrange
             int gameId = 200;
@@ -82,7 +84,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetActiveGameById_ValidGameId_RetrunsOkresult()
+        public void GetGame_ValidGameId_RetrunsOkresult()
         {
             // Arrange
             int gameId = 1;
@@ -96,7 +98,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetActiveGameById_ValidGameId_ReturnsActiveGame()
+        public void GetGame_ValidGameId_ReturnsActiveGame()
         {
             // Arrange
             int gameId = 1;
@@ -109,7 +111,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void StartGameById_NotValidGameId_ReturnsNotFoundResult()
+        public void StartGame_NotValidGameId_ReturnsNotFoundResult()
         {
             // Arrange
             int gameId = 200;
@@ -122,7 +124,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void StartGameById_GameAlreadyOnorEnded_ReturnsUnauthorized()
+        public void StartGame_GameAlreadyOnorEnded_ReturnsUnauthorized()
         {
             // Arrange
             int gameId = 2; // Check FakeGameConiter for HardCoded test games           
@@ -135,7 +137,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void StartGameById_WrongNumberOfPlayers_ReturnsBadRequest()
+        public void StartGame_WrongNumberOfPlayers_ReturnsBadRequest()
         {
             // Arrange
             int gameId = 4; // Check FakeGameConiter for HardCoded test games           
@@ -148,7 +150,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void StartGameById_NotstartedStateAndrightNumberOfPLayers_RetrunsOkResult()
+        public void StartGame_NotstartedStateAndrightNumberOfPLayers_RetrunsOkResult()
         {
             // Arrange
             int gameId = 3; // Check FakeGameConiter for HardCoded test games...Players between 2-4           
@@ -161,20 +163,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void DeleteGameById_NotValidGameId_ReturnsNotFoundResult()
-        {
-            // Arrange
-            int gameId = 200;
-
-            // Act
-            var notFoundResult = _ludoController.Delete(gameId);
-
-            // Assert
-            Assert.IsType<NotFoundObjectResult>(notFoundResult.Result);
-        }
-
-        [Fact]
-        public void StartGameById_ValidGameReult_ReturnsOkResult()
+        public void StartGame_ValidGameReult_ReturnsOkResult()
         {
             // Arrange
             int gameId = 1;
@@ -187,7 +176,20 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetDiceRollResultForAnActiveGame_NotValidGameId_ReturnsNotFoundResult()
+        public void Delete_NotValidGameId_ReturnsNotFoundResult()
+        {
+            // Arrange
+            int gameId = 200;
+
+            // Act
+            var notFoundResult = _ludoController.Delete(gameId);
+
+            // Assert
+            Assert.IsType<NotFoundObjectResult>(notFoundResult.Result);
+        }
+
+        [Fact]
+        public void RollDiece_NotValidGameId_ReturnsNotFoundResult()
         {
             // Arrange
             int gameId = 200;
@@ -200,7 +202,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetDiceRollResultForAnActiveGame_GameNotStartedOrEnded_ReturnsUnauthorized()
+        public void RollDiece_GameNotStartedOrEnded_ReturnsUnauthorized()
         {
             // Arrange
             int gameId = 1; // Check FakeGameConiter for HardCoded test games           
@@ -213,7 +215,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetDiceRollResultForAnActiveGame_ValidGameId_RetrunsOkresult()
+        public void RollDiece_ValidGameId_RetrunsOkresult()
         {
             // Arrange
             int gameId = 2;
@@ -227,7 +229,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetDiceRollResultForAnActiveGame_ValidGameId_RetrunsInteger()
+        public void RollDiece_ValidGameId_RetrunsInteger()
         {
             // Arrange
             int gameId = 2;
@@ -255,7 +257,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetAnActiveGameState_ValidGameId_RetrunsOkresult()
+        public void GetGameState_ValidGameId_RetrunsOkresult()
         {
             // Arrange
             int gameId = 2;
@@ -269,7 +271,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetAnActiveGameState_ValidGameId_RetrunsState()
+        public void GetGameState_ValidGameId_RetrunsState()
         {
             // Arrange
             int gameId = 2;
@@ -282,7 +284,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void MoveAplayerPiec_NotValidGameId_ReturnsNotFoundResult()
+        public void MovePiec_NotValidGameId_ReturnsNotFoundResult()
         {
             // Arrange
             int gameId = 200;
@@ -295,7 +297,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void MoveAplayerPiec_InvalidPiceId_RetrunsUnauthorizedResult()
+        public void MovePiec_InvalidPiceId_RetrunsUnauthorizedResult()
         {
             // Arrange
             int gameId = 2;
@@ -310,7 +312,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void MoveAplayerPiec_GameEnded_RetrunsUnauthorizedResult()
+        public void MovePiec_GameEnded_RetrunsUnauthorizedResult()
         {
             // Arrange
             int gameId = 1;
@@ -325,7 +327,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void MoveAplayerPiec_GameNotStarted_RetrunsUnauthorizedResult()
+        public void MovePiec_GameNotStarted_RetrunsUnauthorizedResult()
         {
             // Arrange
             int gameId = 3;
@@ -338,9 +340,9 @@ namespace LudoAPITest
             // Assert
             Assert.IsType<UnauthorizedObjectResult>(unauthorizedResult.Result);
         }
-
-        [Fact]
-        public void MoveAplayerPiec_PieceInGoal_RetrunsUnauthorizedResult()
+                    
+        [Fact]      
+        public void MovePiec_PieceInGoal_RetrunsUnauthorizedResult()
         {
             // Arrange
             int gameId = 5; //Game started and has right number of Players
@@ -353,9 +355,9 @@ namespace LudoAPITest
             // Assert
             Assert.IsType<UnauthorizedObjectResult>(unauthorizedResult.Result);
         }
-
-        [Fact]
-        public void MoveAplayerPiec_OnePlayeGotAllPiecesInGoal_ReturnsOkResultAndAplayerName()
+                    
+        [Fact]      
+        public void MovePiec_OnePlayeGotAllPiecesInGoal_ReturnsOkResultAndAplayerName()
         {
             // Arrange
             int gameId = 5;  // Game started and has right number of Players, All Pieces in Goal except one with id = 0
@@ -368,9 +370,9 @@ namespace LudoAPITest
             // Assert
             Assert.IsType<OkObjectResult>(okResult.Result);
         }
-
-        [Fact]
-        public void MoveAplayerPiec_PieceMovedByIdSuccesfully_RetrunsOkresult()
+                    
+        [Fact]      
+        public void MovePiec_PieceMovedByIdSuccesfully_RetrunsOkresult()
         {
             // Arrange
             int gameId = 6;  // Game started and has right number of Players
@@ -386,7 +388,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetAllPiecesInAGame_NotValidGameId_ReturnsNotFoundResult()
+        public void GetAllPieces_NotValidGameId_ReturnsNotFoundResult()
         {
             // Arrange
             int gameId = 200;
@@ -399,7 +401,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetAllPiecesInAGame_ValidGameId_ReturnsOkResult()
+        public void GetAllPieces_ValidGameId_ReturnsOkResult()
         {
             // Arrange
             int gameId = 6;
@@ -411,9 +413,8 @@ namespace LudoAPITest
             Assert.IsType<OkObjectResult>(okResult.Result);
         }
 
-
         [Fact]
-        public void GetAllPiecesInAGame_ValidGameId_ListOfAllPieces()
+        public void GetAllPieces_ValidGameId_ListOfAllPieces()
         {
             // Arrange
             int gameId = 6;
@@ -427,7 +428,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetAllPlayersInAGame_NotValidGameId_ReturnsNotFoundResult()
+        public void GetPlayers_NotValidGameId_ReturnsNotFoundResult()
         {
             // Arrange
             int gameId = 200;
@@ -440,7 +441,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetAllPlayersInAGame_ValidGameId_ReturnsOkResult()
+        public void GetPlayers_ValidGameId_ReturnsOkResult()
         {
             // Arrange
             int gameId = 6;
@@ -454,7 +455,7 @@ namespace LudoAPITest
 
 
         [Fact]
-        public void GetAllPlayersInAGame_ValidGameId_ListOfAllPlayers()
+        public void GetPlayers_ValidGameId_ListOfAllPlayers()
         {
             // Arrange
             int gameId = 6;
@@ -468,7 +469,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void AddNewPlayer_NotValidGameId_ReturnsNotFoundResult()
+        public void AddPlayer_NotValidGameId_ReturnsNotFoundResult()
         {
             // Arrange
             int gameId = 200;
@@ -481,7 +482,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void AddNewPlayer_GameStartedOrEnded_ReturnsUnauthorized()
+        public void AddPlayer_GameStartedOrEnded_ReturnsUnauthorized()
         {
             // Arrange
             int gameId = 1;
@@ -496,7 +497,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void AddNewPlayer_ColorAlreadyInUse_ReturnsUnauthorized()
+        public void AddPlayer_ColorAlreadyInUse_ReturnsUnauthorized()
         {
             // Arrange
             int gameId = 5;
@@ -511,7 +512,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void AddNewPlayer_ValidGameIdAndColor_ReturnsOkResult()
+        public void AddPlayer_ValidGameIdAndColor_ReturnsOkResult()
         {
             // Arrange
             int gameId = 3; // Not started game
@@ -526,7 +527,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetCurrentPlayerByGameId_NotValidGameId_ReturnsNotFoundResult()
+        public void GetCurrentPlayer_NotValidGameId_ReturnsNotFoundResult()
         {
             // Arrange
             int gameId = 200;
@@ -539,7 +540,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetCurrentPlayerByGameId_GameNotStarted_ReturnsNotFoundResult()
+        public void GetCurrentPlayer_GameNotStarted_ReturnsNotFoundResult()
         {
             // Arrange
             int gameId = 3; //Not started game
@@ -552,7 +553,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetcurrentPlayerByGameId_ValidGameId_ReturnsOkResult()
+        public void GetcurrentPlayer_ValidGameId_ReturnsOkResult()
         {
             // Arrange
             int gameId = 2; 
@@ -565,7 +566,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetcurrentPlayerByGameId_ValidGameId_ReturnsAplayer()
+        public void GetcurrentPlayer_ValidGameId_ReturnsAplayer()
         {
             // Arrange
             int gameId = 6;
@@ -578,7 +579,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void EndTurnInAGame_NotValidGameId_ReturnsNotFoundResult()
+        public void EndTurn_NotValidGameId_ReturnsNotFoundResult()
         {
             // Arrange
             int gameId = 200;
@@ -592,7 +593,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void EndTurnInAGame_PlayerIdNotMatchingCurrentPlayerId_ReturnsUnauthorized()
+        public void EndTurn_PlayerIdNotMatchingCurrentPlayerId_ReturnsUnauthorized()
         {
             // Arrange
             int gameId = 6;
@@ -606,7 +607,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void EndTurnInAGame_ValidGameIdAndPlayerId_ReturnsOkResult()
+        public void EndTurn_ValidGameIdAndPlayerId_ReturnsOkResult()
         {
             // Arrange
             int gameId = 6;
@@ -620,7 +621,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetTheWinnerPlayer_NotValidGameId_ReturnsNotFoundResult()
+        public void GetTheWinner_NotValidGameId_ReturnsNotFoundResult()
         {
             // Arrange
             int gameId = 200;
@@ -633,7 +634,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetTheWinnerPlayer_NoWinnerFound_ReturnsNotFoundResult()
+        public void GetTheWinner_NoWinnerFound_ReturnsNotFoundResult()
         {
             // Arrange
             int gameId = 6;
@@ -646,7 +647,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetTheWinnerPlayer_WinnerPlayerFound_ReturnsOkResult()
+        public void GetTheWinner_WinnerPlayerFound_ReturnsOkResult()
         {
             // Arrange
             int gameId = 7;
@@ -659,7 +660,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetTheWinnerPlayer_WinnerPlayerFound_ReturnsWinner()
+        public void GetTheWinner_WinnerPlayerFound_ReturnsWinner()
         {
             // Arrange
             int gameId = 7;
@@ -672,7 +673,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetPlayerById_NotValidGameId_ReturnsNotFoundResult()
+        public void GetPlayer_NotValidGameId_ReturnsNotFoundResult()
         {
             // Arrange
             int gameId = 200;
@@ -686,7 +687,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetPlayerById_NoPlayersAddedYet_ReturnsNotFoundResult()
+        public void GetPlayer_NoPlayersAddedYet_ReturnsNotFoundResult()
         {
             // Arrange
             int gameId = 2;
@@ -700,7 +701,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetPlayerById_NotValidPlayerId_ReturnsNotFoundResult()
+        public void GetPlayer_NotValidPlayerId_ReturnsNotFoundResult()
         {
             // Arrange
             int gameId = 6;
@@ -714,7 +715,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetPlayerById_GameIdAndPlayerIdAreValid_ReturnsOkResult()
+        public void GetPlayer_GameIdAndPlayerIdAreValid_ReturnsOkResult()
         {
             // Arrange
             int gameId = 6;
@@ -728,7 +729,7 @@ namespace LudoAPITest
         }
 
         [Fact]
-        public void GetPlayerById_GameIdAndPlayerIdAreValid_ReturnsTheSlectedPlayer()
+        public void GetPlayer_GameIdAndPlayerIdAreValid_ReturnsTheSlectedPlayer()
         {
             // Arrange
             int gameId = 6;
