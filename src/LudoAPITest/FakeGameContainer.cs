@@ -1,14 +1,12 @@
-﻿using System;
+﻿using LudoGameEngine;
+using LudoWebAPI.Models;
 using System.Collections.Generic;
-using System.Text;
-using LudoGameEngine;
-using LudoWebAPI.Models; 
 
 namespace LudoAPITest
 {
     public class FakeGameContainer : IGameContainer
     {
-        private readonly Dictionary<int, ILudoGame> _activeGames;        
+        private readonly Dictionary<int, ILudoGame> _activeGames;
         private readonly ILudoGame _ludoGame;
         private readonly IDiece _diece;
 
@@ -73,7 +71,7 @@ namespace LudoAPITest
                 },
             };
 
-            
+
         }
 
         public Dictionary<int, ILudoGame> Gamesloader()
@@ -82,12 +80,12 @@ namespace LudoAPITest
             return _activeGames;
         }
 
-       
-        public void AddNewGame()
+
+        public int AddNewGame()
         {
             int newId = 1;
 
-           
+
             if (_activeGames.Count > 0)
             {
                 foreach (var pair in _activeGames)
@@ -98,6 +96,7 @@ namespace LudoAPITest
             }
 
             _activeGames.Add(newId, new LudoGame(_diece));
+            return newId;
         }
     }
 }

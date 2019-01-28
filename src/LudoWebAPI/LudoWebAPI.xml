@@ -4,11 +4,6 @@
         <name>LudoWebAPI</name>
     </assembly>
     <members>
-        <member name="T:LudoWebAPI.Controllers.LudoController">
-            <summary>
-            API Help guide
-            </summary>
-        </member>
         <member name="M:LudoWebAPI.Controllers.LudoController.GetGames">
             <summary>
             Returns all active games

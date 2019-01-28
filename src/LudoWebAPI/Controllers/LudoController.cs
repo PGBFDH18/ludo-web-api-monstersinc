@@ -7,19 +7,15 @@ using System.Linq;
 
 namespace LudoWebAPI.Controllers
 {
-    /// <summary>
-    /// API Help guide
-    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class LudoController : ControllerBase
     {
         private readonly Dictionary<int, ILudoGame> _activeGames;
         private readonly IGameContainer _game;
-        
-        
+
         public LudoController(IGameContainer game)
-        {     
+        {
             _game = game;
             _activeGames = game.Gamesloader();
         }
@@ -48,11 +44,11 @@ namespace LudoWebAPI.Controllers
         /// <response code="200">New Game added</response>       
         // POST api/ludo
         [HttpPost]
-        [ProducesResponseType(typeof(string), 200)]        
+        [ProducesResponseType(typeof(string), 200)]
         public ActionResult<string> NewGame()
         {
             _game.AddNewGame();
-            return Ok("New game added");
+            return Ok("New game added wiht Id: " + _game.AddNewGame());
         }
 
         /// <summary>
@@ -64,7 +60,7 @@ namespace LudoWebAPI.Controllers
         /// <response code="404">Game was not found</response>
         // GET api/ludo/2
         [HttpGet("{gameId}")]
-        [ProducesResponseType(typeof(object),200)]
+        [ProducesResponseType(typeof(object), 200)]
         [ProducesResponseType(404)]
         public ActionResult<LudoGame> GetGame(int gameId)
         {
@@ -123,7 +119,7 @@ namespace LudoWebAPI.Controllers
         [HttpDelete("{gameId}")]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
-        public ActionResult <string>Delete(int gameId)
+        public ActionResult<string> Delete(int gameId)
         {
             if (!_activeGames.ContainsKey(gameId))
                 return NotFound("gameId is not found");
@@ -197,7 +193,7 @@ namespace LudoWebAPI.Controllers
         /// <response code="404">wrong Player</response>        
         // PUT api/ludo/2/movepiece?pieceId=1&roll=5
         [HttpPut("{gameId}/movepiece")]
-        [ProducesResponseType(typeof(string),200)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(401)]
@@ -264,7 +260,7 @@ namespace LudoWebAPI.Controllers
                 return NotFound("gameId is not found");
 
             var game = _activeGames[gameId];
-            return Ok(game.GetAllPiecesInGame());            
+            return Ok(game.GetAllPiecesInGame());
         }
 
         /// <summary>
@@ -275,7 +271,7 @@ namespace LudoWebAPI.Controllers
         /// <response code="200">List of active players</response>
         /// <response code="404">Game not found, Wrong id</response>
         // GET api/ludo/2/player
-        [HttpGet("{gameId}/player")]        
+        [HttpGet("{gameId}/player")]
         [ProducesResponseType(typeof(Array), 200)]
         [ProducesResponseType(404)]
         public ActionResult<IEnumerable<Player[]>> GetPlayers(int gameId)
@@ -370,7 +366,7 @@ namespace LudoWebAPI.Controllers
 
             var currentPlayer = _activeGames[gameId].GetCurrentPlayer();
 
-            if (playerId != currentPlayer.PlayerId)            
+            if (playerId != currentPlayer.PlayerId)
                 return Unauthorized($"Wrong player, it's currently {currentPlayer.PlayerId}");
 
             _activeGames[gameId].EndTurn(currentPlayer);
@@ -398,7 +394,7 @@ namespace LudoWebAPI.Controllers
 
             var player = _activeGames[gameId].GetWinner();
 
-            if(player == null)
+            if (player == null)
             {
                 return NotFound("No winner found");
             }
@@ -434,7 +430,7 @@ namespace LudoWebAPI.Controllers
                 return NotFound("This game has no players yet");
             }
 
-            if (playerId > (players.Count() -1) || playerId < 0)
+            if (playerId > (players.Count() - 1) || playerId < 0)
                 return NotFound("Player not found");
 
             return Ok(players[playerId]);

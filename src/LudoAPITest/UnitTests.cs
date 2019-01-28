@@ -12,17 +12,18 @@ namespace LudoAPITest
         IGameContainer _gameContainer;
         LudoController _ludoController;
 
-        // Helper Method
-        private void EmptyGameList()
-        {
-            _gameContainer.Gamesloader().Clear();
-        } 
 
         public UnitTests()
         {
             _gameContainer = new FakeGameContainer();
             _ludoController = new LudoController(_gameContainer);
         }
+
+        // Helper Method
+        private void EmptyGameList()
+        {
+            _gameContainer.Gamesloader().Clear();
+        } 
 
         [Fact]
         public void GetGames_GameListISEmpty_ReturnsNotFoundResult()
@@ -35,6 +36,7 @@ namespace LudoAPITest
 
             // Assert
             Assert.IsType<NotFoundObjectResult>(notFoundResult.Result);
+
         }
 
         [Fact]

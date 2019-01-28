@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace LudoGameEngine
 {
@@ -130,7 +129,7 @@ namespace LudoGameEngine
             }
 
             var currentPosition = piece.Position;
-            
+
             var newPosition = currentPosition + steps;
             piece.State = PieceGameState.InGame;
             piece.Position = newPosition;
@@ -143,7 +142,7 @@ namespace LudoGameEngine
             if (newPosition > 55)
             {
                 piece.State = PieceGameState.Goal;
-            }            
+            }
         }
 
         public int RollDiece()
@@ -184,8 +183,9 @@ namespace LudoGameEngine
 
         public Player GetWinner()
         {
-            foreach (var player in _players) { 
-                if(player.Pieces.All(p => p.State == PieceGameState.Goal))
+            foreach (var player in _players)
+            {
+                if (player.Pieces.All(p => p.State == PieceGameState.Goal))
                 {
                     _gameState = GameState.Ended;
                     return player;

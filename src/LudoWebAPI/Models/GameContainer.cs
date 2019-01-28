@@ -19,8 +19,8 @@ namespace LudoWebAPI.Models
         public GameContainer(IDiece diece)
         {
             _diece = diece;
-            _activeGames = new Dictionary<int, ILudoGame>();            
-           
+            _activeGames = new Dictionary<int, ILudoGame>();
+
 
         }
 
@@ -37,7 +37,7 @@ namespace LudoWebAPI.Models
         /// <summary>
         /// Creates new game 
         /// </summary>
-        public void AddNewGame()
+        public int AddNewGame()
         {
             int newId = 1;
 
@@ -51,6 +51,7 @@ namespace LudoWebAPI.Models
                 }
             }
             _activeGames.Add(newId, new LudoGame(_diece));
+            return newId;
         }
 
 
