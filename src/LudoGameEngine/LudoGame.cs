@@ -10,7 +10,7 @@ namespace LudoGameEngine
         public List<Player> _players = new List<Player>();
         public GameState _gameState = GameState.NotStarted;
         public int currentPlayerId = 0;
-        private IDiece _diece = new Diece();
+        private IDiece _diece = null;
 
         public LudoGame(IDiece diece)
         {

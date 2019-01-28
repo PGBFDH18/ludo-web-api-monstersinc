@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using LudoGameEngine;
+using LudoWebAPI.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-
+using Swashbuckle.AspNetCore.Swagger;
 namespace LudoWebAPI
 {
     public class Startup
@@ -26,6 +21,22 @@ namespace LudoWebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvcCore();
+            services.AddMvcCore().AddApiExplorer();
+            services.AddSingleton<IGameContainer, GameContainer>();
+            services.AddTransient<IDiece, Diece>();
+            //services.AddScoped<ILudoGame, LudoGame>(); //IF i add this to singeleton i can't create more than one Ludogame
+            //and this code won't compile if its scopped because an singleton depends on it. Igamcontainer
+            //services.AddSingleton<LudoController>(); Ask the teacher about this :)
+
+            services.AddSwaggerGen(c =>
+            {
+                c.DescribeAllEnumsAsStrings();
+                c.DescribeAllParametersInCamelCase();
+                c.SwaggerDoc("v1", new Info { Title = "Ludo API" });
+                var xmlPath = System.AppDomain.CurrentDomain.BaseDirectory + @"LudoWebAPI.xml";
+                c.IncludeXmlComments(xmlPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +54,12 @@ namespace LudoWebAPI
 
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ludo API");
+            });
         }
     }
 }
