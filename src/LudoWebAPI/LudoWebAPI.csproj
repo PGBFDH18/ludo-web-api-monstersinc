@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\Users\Giss\Documents\GitHub\ludo-web-api-monstersinc\src\LudoWebAPI\LudoWebAPI.xml</DocumentationFile>
+    <DocumentationFile>LudoWebAPI.xml</DocumentationFile>
     <OutputPath></OutputPath>
   </PropertyGroup>
 
@@ -21,6 +21,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LudoGameEngine\LudoGameEngine.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="LudoWebAPI.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

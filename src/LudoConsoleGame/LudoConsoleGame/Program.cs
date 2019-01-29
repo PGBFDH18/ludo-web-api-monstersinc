@@ -37,7 +37,6 @@ namespace LudoConsoleGame
 
         private static void MainScreen()
         {
-            string input = "";
             bool IsMainScreen = true;
             do
             {
@@ -48,35 +47,45 @@ namespace LudoConsoleGame
                 Console.WriteLine("[4]Delete A game");
                 Console.WriteLine("[5]Exit programm");
                 Console.Write("Choice: ");
-                input = Console.ReadLine();
+                int input;
+                while (true)
+                {
+                    try
+                    {
+                        input = int.Parse(Console.ReadLine());
+                        break;
+                    }
+                    catch (FormatException e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                }
 
                 switch (input)
                 {
-                    case "1":
+                    case 1:
                         ludo.CreateNewGame();
                         break;
-                    case "2":
-
+                    case 2:
                         Dictionary<int, LudoGame> activeGames = ludo.ActiveGames();
-                        Console.WriteLine("Current Active Game:");
+                        Console.WriteLine("Current Active Game(s):");
 
-                        try
+                        if (activeGames != null)
                         {
                             foreach (KeyValuePair<int, LudoGame> entry in activeGames)
                                 Console.WriteLine("Ludo Game, ID: " + entry.Key);
                         }
-                        catch
-                        {
+                        else
                             Console.WriteLine("No active games available");
-                        }
+
                         break;
-                    case "3":
+                    case 3:
                         IsMainScreen = false;
                         break;
-                    case "4":
+                    case 4:
                         ludo.DeleteGame(gameId);
                         break;
-                    case "5":
+                    case 5:
                         IsRunning = false;
                         return;                        
                     default:
