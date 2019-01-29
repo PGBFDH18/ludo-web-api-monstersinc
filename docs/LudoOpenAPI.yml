@@ -1,0 +1,410 @@
+openapi: 3.0.0
+info:
+  title: "LudoAPI"
+  version: "1.0.0"
+  contact:
+    name: Team MonstersINC
+components:
+  parameters:
+    gameIdParameter:
+      in: path
+      name: gameId
+      required: true
+      schema:
+        type: integer
+      description: active game id
+paths:
+  /api/ludo:
+    get:
+     summary: returns all active games on the server at the time of request
+     responses:
+        '400':
+          description: NotFound, No running games 
+        '200':
+          description: OK  
+          content:
+            text/json:
+              schema:
+                type: array
+                items:
+                 type: object
+                 properties:
+                   id: 
+                    type: integer
+                   ludogame:
+                      type: object
+                      properties:
+                       _players: 
+                         type: array
+                         items:
+                           type: object
+                           properties:
+                             PlayerID:
+                               type: integer
+                             Name:
+                                type: string
+                             PlayerColour:
+                                type: string  
+                                enum: [red, green, blue, yellow]
+                             Piece:
+                                type: array
+                                items: 
+                                    type: object
+                                    properties:
+                                       position:
+                                         type: integer
+                                       state:
+                                         type: string
+                                       pieceId:
+                                         type: integer 
+                       _gamestate:
+                          type: string
+                          enum: [ Started, NotStarted, Ended]
+                       currentPlayerId:
+                          type: integer
+                       _diece:
+                          type: object
+    post:
+     summary: Starts new game
+     responses:
+        '200':
+          description: OK  
+  /api/ludo/{gameId}:
+    parameters: 
+       - $ref: '#/components/parameters/gameIdParameter'
+    get:
+     summary: return active Game by ID
+     responses:
+        '404':
+          description: NotFound, game not found 
+        '200':
+          description: OK
+          content:
+             text/json:
+               schema:
+                 type: object
+                 properties:
+                       _players: 
+                         type: array
+                         items:
+                           type: object
+                           properties:
+                             PlayerID:
+                               type: integer
+                             Name:
+                                type: string
+                             PlayerColour:
+                                type: string  
+                                enum: [red, green, blue, yellow]
+                             Piece:
+                                type: array
+                                items: 
+                                    type: object
+                                    properties:
+                                       position:
+                                         type: integer
+                                       state:
+                                         type: string
+                                       pieceId:
+                                         type: integer 
+                       _gamestate:
+                          type: string
+                          enum: [ Started, NotStarted, Ended]
+                       currentPlayerId:
+                          type: integer
+                       _diece:
+                          type: object
+    put:
+      summary: starts new game on the server
+      responses:
+        '404':
+          description: NotFound, game not found 
+        '401':
+          description: Unauthorized, game already started or ended
+        '400':
+          description: BadRequest, Players must be btween 2-4
+        '200':
+          description: OK
+    delete:
+     summary: delete active game by id
+     responses:
+        '404':
+          description: NotFound, game not found 
+        '200':
+          description: OK
+  /api/ludo/{gameId}/roll:
+    parameters: 
+      - $ref: '#/components/parameters/gameIdParameter'
+    get:
+      summary: Rolls the die and return what number it gave.
+      responses:
+        '404':
+          description: NotFound, game not found 
+        '401':
+          description: Unauthorized, Game is not started
+        '200':
+          description: OK
+          content:
+            text/json:
+              schema:
+                type: integer 
+  /api/ludo/{gameId}/state:
+    parameters: 
+      - $ref: '#/components/parameters/gameIdParameter'
+    get:
+      summary: Gets a game state
+      responses:
+        '404':
+          description: NotFound, game not found
+        '200':
+          description: OK
+          content:
+            text/json:
+              schema:
+                type: string
+                enum: [ Started, NotStarted, Ended]
+  /api/ludo/{gameId}/movepiece:
+    parameters: 
+      - $ref: '#/components/parameters/gameIdParameter'
+    get:
+      summary: Moves the piece
+      responses:
+        '404':
+          description: NotFound, game not foundr
+        '401':
+          description: Unauthorized, Game is not started
+                       Unauthorized, Invalid PiceID, must be between 0 and 3
+                       Unauthorized, game ended and winner is found
+                       Unauthorized, Piece in Goal
+        '200':
+          description: OK, Piece Moved
+                       OK, returns the winner name                      
+      parameters:
+        - in: query
+          name: PeiceId
+          required: true
+          schema:
+             type: integer             
+          description: Piece to move
+        - in: query
+          name: roll
+          schema: 
+            type: integer
+          required: true
+          description: returns the outcome of the diece roll         
+  /api/ludo/{gameId}/allpieces:
+    parameters: 
+      - $ref: '#/components/parameters/gameIdParameter'
+    get:
+      summary: return all pieces in a game
+      responses:
+        '404':
+          description: NotFound, game not found
+        '200':
+          description: OK
+          content: 
+            text/json:
+             schema:
+               type: array
+               items:
+                 type: object
+                 properties:
+                    PieceId:
+                      type: integer
+                    PieceGameState:
+                      type: string
+                      enum: [HomeArea, InGame, GoalPath,Goal]
+                    Position: 
+                      type: integer
+  /api/ludo/{gameId}/player:
+    parameters: 
+       - $ref: '#/components/parameters/gameIdParameter'
+    get:
+      summary: returns all players in an active game
+      responses:
+        '404':
+          description: NotFound, game not found
+        '200':
+          description: OK
+          content: 
+            text/json:
+              schema:
+                 type: array
+                 items:
+                  type: object
+                  properties:
+                     PlayerID:
+                        type: integer
+                     Name:
+                        type: string
+                     PlayerColour:
+                        type: string  
+                        enum: [red, green, blue, yellow]
+                     Piece:
+                       type: array
+                       items: 
+                        type: object
+                        properties:
+                           position:
+                             type: integer
+                           state:
+                             type: string
+                           pieceId:
+                             type: integer 
+    post:
+      summary: Adds new player  
+      responses:
+        '404':
+          description: NotFound, game not found
+        '401':
+          description: Unauthorized, Unable to add player because a game either started or ended
+                       Unauthorized, the color is already in use
+        '200':
+          description: OK, new palyer added
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          required: true
+          description: Name of player to set
+        - in: query
+          name: color
+          schema:
+            type: string
+            enum: [red, green blue, yellow]
+          required: true
+          description: color of player to set
+  /api/ludo/{gameId}/player/current:
+    parameters: 
+       - $ref: '#/components/parameters/gameIdParameter'
+    get:
+      summary: returns current player in an active game
+      responses:
+        '404':
+          description: NotFound, game not found
+                       NotFound, game not stareted yet
+        '200':
+          description: OK
+          content: 
+            text/json:
+              schema:
+                  type: object
+                  properties:
+                     PlayerID:
+                        type: integer
+                     Name:
+                        type: string
+                     PlayerColour:
+                        type: string  
+                        enum: [red, green, blue, yellow]
+                     Piece:
+                       type: array
+                       items: 
+                        type: object
+                        properties:
+                           position:
+                             type: integer
+                           state:
+                             type: string
+                           pieceId:
+                             type: integer 
+  /api/{gameId}/player/{playerId}/endturn:
+    parameters: 
+      - $ref: '#/components/parameters/gameIdParameter'
+    get:
+      summary: returns a player using an id
+      responses:
+        '404':
+          description: NotFound, game not found
+        '401':
+          description: Unauthorized, wrong player
+        '200':
+          description: OK, Ends turn and check for a winner
+      parameters:
+        - in: path
+          name: playerId
+          required: true
+          schema:
+            type: integer
+          description: The Palyer ID
+  /api/ludo/{gameId}/getwinner:
+    parameters: 
+      - $ref: '#/components/parameters/gameIdParameter'
+    get:
+      summary: rturns the winner player
+      responses:
+        '404':
+          description: NotFound, game not found
+                       NotFound, No winner found
+        '200':
+          description: OK, Winner Found
+          content:
+              text/json:
+                 schema:
+                    type: object
+                    properties:
+                        PlayerID:
+                          type: integer
+                        Name:
+                          type: string
+                        PlayerColour:
+                          type: string 
+                          enum: [red, green, blue, yellow]
+                        Piece:
+                          type: array
+                          items: 
+                            type: object
+                            properties:
+                                position:
+                                  type: integer
+                                state:
+                                  type: string
+                                pieceId:
+                                  type: integer
+  /api/{gameId}/player/{playerId}:
+    parameters: 
+      - $ref: '#/components/parameters/gameIdParameter'
+    get:
+      summary: returns a player using an id
+      responses:
+        '404':
+          description: NotFound, game not found
+                       NotFound, Game has no players
+                       NotFound, Player not found
+        '200':
+          description: OK
+          content: 
+            text/json:
+              schema:
+                 type: object
+                 properties:
+                     PlayerID:
+                        type: integer
+                     Name:
+                        type: string
+                     PlayerColour:
+                        type: string  
+                        enum: [red, green, blue, yellow]
+                     Piece:
+                       type: array
+                       items: 
+                        type: object
+                        properties:
+                           position:
+                             type: integer
+                           state:
+                             type: string
+                           pieceId:
+                             type: integer 
+      parameters:
+        - in: path
+          name: playerId
+          required: true
+          schema:
+            type: integer
+          description: The Palyer ID
+  
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/Teknikhogskola/Ludo/1.0.0

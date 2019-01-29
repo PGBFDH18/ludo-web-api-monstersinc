@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LudoWebAPI</name>
+    </assembly>
+    <members>
+        <member name="M:LudoWebAPI.Controllers.LudoController.GetGames">
+            <summary>
+            Returns all active games
+            </summary>
+            <returns>List of active games</returns>
+        </member>
+        <member name="M:LudoWebAPI.Controllers.LudoController.NewGame">
+            <summary>
+            Creates a new game
+            </summary>
+            <returns>Confirmation message that a game is created</returns>
+            <response code="200">New Game added</response>       
+        </member>
+        <member name="M:LudoWebAPI.Controllers.LudoController.GetGame(System.Int32)">
+            <summary>
+            Returns a specific game by Id
+            </summary>
+            <param name="gameId"></param>
+            <returns>Game object</returns>
+            <response code="200">OK</response>
+            <response code="404">Game was not found</response>
+        </member>
+        <member name="M:LudoWebAPI.Controllers.LudoController.StartGame(System.Int32)">
+            <summary>
+            Starts a new game
+            </summary>
+            <param name="gameId">Unique Identifier for a game</param>
+            <returns>Game state</returns>
+            /// <response code="200">Started</response>
+            <response code="404">Game was not found</response>
+        </member>
+        <member name="M:LudoWebAPI.Controllers.LudoController.Delete(System.Int32)">
+            <summary>
+            Deletes a game by Id
+            </summary>
+            <param name="gameId">Unique Identifier for a game</param>
+            <returns>Confirmation with game Id</returns>
+            <respose code="200">Game deleted</respose>
+            <response code="404">Game was not found</response>         
+        </member>
+        <member name="M:LudoWebAPI.Controllers.LudoController.RollDiece(System.Int32)">
+            <summary>
+            Return an integer from a diece roll bewteen 1 and 6
+            </summary>
+            <param name="gameId">Unique Identifier for a game</param>
+            <returns>A number beteween 1 and 6 </returns>
+            <response code="200">number returned</response>
+            <response code="404">Game was not found</response>
+            <response code="401">Game not started</response>
+        </member>
+        <member name="M:LudoWebAPI.Controllers.LudoController.GetGameState(System.Int32)">
+            <summary>
+            Returns whether game started, ended och not started 
+            </summary>
+            <param name="gameId">Unique Identifier for a game</param>
+            <returns>Game state</returns>
+            <response code="200">Game state</response>
+            <response code="404">Game not found</response>
+        </member>
+        <member name="M:LudoWebAPI.Controllers.LudoController.MovePiece(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Move the piece in turn
+            </summary>
+            <param name="gameId">Unique Identifier for a game</param>
+            <param name="pieceId">Unique Identifier for a piece</param>
+            <param name="roll">The result of a dice roll</param>
+            <returns>Piece moved</returns>
+            <response code="200">Pice Moved</response>
+            <response code="200">A winner found</response>
+            <response code="404">Game not found</response>
+            <response code="401">Invalid PiceID, must be between 0 and 3</response>
+            <response code="401">Game is not yet started</response>
+            <response code="401">Game is ended</response>
+            <response code="401">Pice is in goal</response>
+            <response code="404">wrong Player</response>        
+        </member>
+        <member name="M:LudoWebAPI.Controllers.LudoController.GetAllPieces(System.Int32)">
+            <summary>
+            Returns all pieces
+            </summary>
+            <param name="gameId">Unique Identifier for a game</param>
+            <returns>List of pieces</returns>
+            <response code="200">List of pieces {id, position, state}</response>
+            <response code="404">Game not found</response>
+        </member>
+        <member name="M:LudoWebAPI.Controllers.LudoController.GetPlayers(System.Int32)">
+            <summary>
+            Returns a list of players in an active game by game id
+            </summary>
+            <param name="gameId">Unique game Identifier</param>
+            <returns>List of players</returns>
+            <response code="200">List of active players</response>
+            <response code="404">Game not found, Wrong id</response>
+        </member>
+        <member name="M:LudoWebAPI.Controllers.LudoController.AddPlayer(System.Int32,System.String,LudoGameEngine.PlayerColor)">
+            <summary>
+            Adds new players to an active game
+            </summary>
+            <param name="gameId"></param>
+            <param name="name"></param>
+            <param name="color"></param>
+            <returns>Confirmation message</returns>
+            <response code="200">New player added with name and color</response>
+            <response code="404">New player added with name and color</response>
+            <response code="401">Game started or ended</response>
+            <response code="401">Color already in use</response>
+        </member>
+        <member name="M:LudoWebAPI.Controllers.LudoController.GetCurrentPlayer(System.Int32)">
+            <summary>
+            Returns the player in current turn
+            </summary>
+            <param name="gameId"></param>
+            <returns>Active player</returns>
+            <response code="200">Player {Id, color, All Pieces}</response>
+            <response code="404">Game not found</response>
+            <response code="404">Game not started</response>
+        </member>
+        <member name="M:LudoWebAPI.Controllers.LudoController.EndTurn(System.Int32,System.Int32)">
+            <summary>
+            Ends current player turn
+            </summary>
+            <param name="gameId"></param>
+            <param name="playerId"></param>
+            <returns>confirmation message</returns>
+            <response code="200">Turn ended and check for winner done</response>
+            <response code="404">Game not found</response>
+            <response code="401">Wrong player</response>
+        </member>
+        <member name="M:LudoWebAPI.Controllers.LudoController.GetWinner(System.Int32)">
+            <summary>
+            Returns a winner palyer
+            </summary>
+            <param name="gameId"></param>
+            <returns>The winner {id, color, all pieces}</returns>
+            <response code="200">winner found</response>
+            <response code="404">Game not found</response>
+            <response code="404">winner not found</response>
+        </member>
+        <member name="M:LudoWebAPI.Controllers.LudoController.GetPlayer(System.Int32,System.Int32)">
+            <summary>
+            Retruns a player by id
+            </summary>
+            <param name="gameId"></param>
+            <param name="playerId"></param>
+            <returns>Player {id, color, pices}</returns>
+            <response code="200">player info</response>
+            <response code="404">Game not found</response>
+            <response code="404">Player not found</response>
+            <response code="404">Game not found</response>
+            <response code="404">player not found</response>
+        </member>
+        <member name="T:LudoWebAPI.Models.GameContainer">
+            <summary>
+            This class creates a collection of games
+            </summary>
+        </member>
+        <member name="M:LudoWebAPI.Models.GameContainer.#ctor(LudoGameEngine.IDiece)">
+            <summary>
+            A constructor that inisiate other classes through DI
+            </summary>
+            <param name="diece"></param>
+            <param name="ludoGame"></param>        
+        </member>
+        <member name="M:LudoWebAPI.Models.GameContainer.Gamesloader">
+            <summary>
+            Returns list of active games 
+            </summary>
+            <returns>List of active games</returns>
+        </member>
+        <member name="M:LudoWebAPI.Models.GameContainer.AddNewGame">
+            <summary>
+            Creates new game 
+            </summary>
+        </member>
+        <member name="T:LudoWebAPI.Models.IGameContainer">
+            <summary>
+            Inteface for GameContainer
+            </summary>
+        </member>
+    </members>
+</doc>
