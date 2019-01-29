@@ -47,8 +47,8 @@ namespace LudoWebAPI.Controllers
         [ProducesResponseType(typeof(string), 200)]
         public ActionResult<string> NewGame()
         {
-            _game.AddNewGame();
-            return Ok("New game added wiht Id: " + _game.AddNewGame());
+            int id = _game.AddNewGame();
+            return Ok("New game added wiht Id: " + id);
         }
 
         /// <summary>
@@ -396,7 +396,7 @@ namespace LudoWebAPI.Controllers
 
             if (player == null)
             {
-                return NotFound("No winner found");
+                return NotFound(null);
             }
 
             return Ok(player);
