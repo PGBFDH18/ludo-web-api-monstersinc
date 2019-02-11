@@ -48,7 +48,7 @@ namespace LudoWebAPI.Controllers
         public ActionResult<string> NewGame()
         {
             int id = _game.AddNewGame();
-            return Ok("New game added wiht Id: " + id);
+            return Ok(id);
         }
 
         /// <summary>
