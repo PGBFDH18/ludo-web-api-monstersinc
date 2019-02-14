@@ -15,7 +15,7 @@ namespace LudoAPITest
 
         public UnitTests()
         {
-            _gameContainer = new FakeGameContainer();
+            _gameContainer = new GameContainerMock();
             _ludoController = new LudoController(_gameContainer);
         }
 
@@ -688,13 +688,11 @@ namespace LudoAPITest
             Assert.IsType<NotFoundObjectResult>(notFoundResult.Result);
         }
 
-        [Fact]
-        public void GetPlayer_NoPlayersAddedYet_ReturnsNotFoundResult()
+        [Theory]
+        [InlineData(1, 2)]
+        [InlineData(5, 3)]
+        public void GetPlayer_NoPlayersAddedYet_ReturnsNotFoundResult(int gameId, int playerId)
         {
-            // Arrange
-            int gameId = 2;
-            int playerId = 0;
-
             // Act
             var notFoundResult = _ludoController.GetPlayer(gameId, playerId);
 

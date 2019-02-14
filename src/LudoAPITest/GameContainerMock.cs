@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace LudoAPITest
 {
-    public class FakeGameContainer : IGameContainer
+    public class GameContainerMock : IGameContainer
     {
         private readonly Dictionary<int, ILudoGame> _activeGames;
         private readonly ILudoGame _ludoGame;
         private readonly IDiece _diece;
 
 
-        public FakeGameContainer()
+        public GameContainerMock()
         {
 
             _diece = new Diece();
