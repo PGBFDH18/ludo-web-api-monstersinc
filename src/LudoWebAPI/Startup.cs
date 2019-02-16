@@ -24,6 +24,7 @@ namespace LudoWebAPI
             services.AddMvcCore();
             services.AddMvcCore().AddApiExplorer();
             services.AddSingleton<IGameContainer, GameContainer>();
+            services.AddSingleton<IStatsContainter, StatsContainer>();
             services.AddTransient<IDiece, Diece>();
             //services.AddScoped<ILudoGame, LudoGame>(); //IF i add this to singeleton i can't create more than one Ludogame
             //and this code won't compile if its scopped because an singleton depends on it. Igamcontainer

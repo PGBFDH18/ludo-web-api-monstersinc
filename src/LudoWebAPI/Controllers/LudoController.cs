@@ -12,12 +12,16 @@ namespace LudoWebAPI.Controllers
     public class LudoController : ControllerBase
     {
         private readonly Dictionary<int, ILudoGame> _activeGames;
+        private readonly List<Winner> _gameStats;
         private readonly IGameContainer _game;
+        private readonly IStatsContainter _stats;
 
-        public LudoController(IGameContainer game)
+        public LudoController(IGameContainer game, IStatsContainter stats)
         {
             _game = game;
             _activeGames = game.Gamesloader();
+            _stats = stats;
+            _gameStats = stats.StatsLoader();
         }
 
         /// <summary>
@@ -434,6 +438,31 @@ namespace LudoWebAPI.Controllers
                 return NotFound("Player not found");
 
             return Ok(players[playerId]);
+        }
+
+        //GET api/ludo/stats
+        [HttpGet("stats")]
+        public ActionResult<List<Winner>> GetStats()
+        {
+            if (_gameStats.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(_gameStats);
+        }
+
+        // POST api/ludo/stats
+        [HttpPost("stats")]
+        public ActionResult<string> AddStats(string name)
+        {
+            if (name == null)
+            {
+                return BadRequest("No name included in request.");
+            }
+
+            _stats.AddWinner(name);
+            return Ok("Winner added to stats.");
         }
     }
 }
