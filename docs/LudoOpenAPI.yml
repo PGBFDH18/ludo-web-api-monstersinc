@@ -338,7 +338,7 @@ paths:
           description: NotFound, game not found
                        NotFound, No winner found
         '200':
-          description: OK, Winner Found
+          description: OK
           content:
               text/json:
                  schema:
